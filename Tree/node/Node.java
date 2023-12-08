@@ -1,7 +1,13 @@
 package node;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
+
+import javax.swing.AbstractAction;
 
 public class Node
 {
@@ -211,4 +217,69 @@ public class Node
         return num;
     }
 
+
+    /*
+     * Using Stack to store each level, in each level store from right to left
+     */
+    public static void levelOrderTraversalInReverse(Node root)
+    {
+        if(root == null)
+        {
+            return;
+        }
+        List<Node> s = new ArrayList<>();
+        Deque<Node> q = new ArrayDeque<>();
+        q.addLast(root);
+        s.addLast(root);
+        while(q.size() != 0)
+        {
+            Node temp = q.removeFirst();
+            if(temp.rightNode != null)
+            {
+                q.addLast(temp.rightNode);
+                s.addLast(temp.rightNode);
+            }
+            if(temp.leftNode != null)
+            {
+                q.addLast(temp.leftNode);
+                s.addLast(temp.leftNode);
+            }
+        }
+
+        while(s.size() != 0)
+        {
+            Node temp = s.removeLast();
+            System.out.print(temp.val);
+        }
+        System.out.println();
+        
+    }
+
+    public static void preOrderTraversal(Node root)
+    {
+        if(root == null)
+        {
+            return;
+        }
+        List<Node> l = new ArrayList<>();
+        Node temp = root;
+        Node currentNode;
+        while(true)
+        {
+            while(temp != null)
+            {
+                l.addLast(temp);
+                temp = temp.leftNode;
+            }
+            if(l.size() == 0)
+            {
+                break;
+            }
+            currentNode = l.removeLast();
+            System.out.print(currentNode.val);
+            temp = currentNode.rightNode;
+        }
+    }
+
+    // public void preOrderTraversal() <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
