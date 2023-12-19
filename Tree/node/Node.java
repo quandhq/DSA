@@ -255,31 +255,126 @@ public class Node
         
     }
 
-    public static void preOrderTraversal(Node root)
+    
+
+    public static void preOrderTraversalUsingRecursion(Node root)
+    {
+        if(root != null)
+        {
+            System.out.print(root.val);
+            preOrderTraversalUsingRecursion(root.leftNode);
+            preOrderTraversalUsingRecursion(root.rightNode);
+        }
+    }
+
+    public static void preOrderTraversalWithoutRecursion(Node root)
+    {
+        if(root != null)
+        {
+            List<Node> s = new ArrayList<>();
+            Node currentNode = root;
+            while(true)
+            {
+                while(currentNode != null)
+                {
+                    System.out.print(currentNode.val);
+                    s.addLast(currentNode);
+                    currentNode = currentNode.leftNode;
+                }
+                if(s.size() == 0)
+                {
+                    break;
+                }
+                currentNode = s.removeLast().rightNode;
+            }
+        }
+    }
+
+    public static void inOrderTraversalWithRecursion(Node root)
+    {
+        if(root != null)
+        {
+            inOrderTraversalWithRecursion(root.leftNode);
+            System.out.print(root.val);
+            inOrderTraversalWithRecursion(root.rightNode);
+        }
+    }
+
+    public static void inOrderTraversalWithoutRecursion(Node root)
     {
         if(root == null)
         {
             return;
         }
-        List<Node> l = new ArrayList<>();
-        Node temp = root;
-        Node currentNode;
+        List<Node> l = new ArrayList<>();   //use this as a Stack
+        Node currentNode = root;
         while(true)
         {
-            while(temp != null)
+            while(currentNode != null)
             {
-                l.addLast(temp);
-                temp = temp.leftNode;
+                l.addLast(currentNode);
+                currentNode = currentNode.leftNode;
             }
             if(l.size() == 0)
             {
-                break;
+                return;
             }
             currentNode = l.removeLast();
             System.out.print(currentNode.val);
-            temp = currentNode.rightNode;
+            currentNode = currentNode.rightNode;
         }
     }
 
-    // public void preOrderTraversal() <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    public static void postOrderTraversalWithRecursion(Node root)
+    {
+        if(root != null)
+        {
+            postOrderTraversalWithRecursion(root.leftNode);
+            postOrderTraversalWithRecursion(root.rightNode);
+            System.out.print(root.val);
+        }
+    }
+
+    public static void postOrderTraversalWithoutRecursion(Node root)
+    {
+        if(root == null)
+        {
+            return;
+        }
+
+        List<Node> l = new ArrayList<>();
+        Node currentNode = root;
+        Node prevNode = null;
+    
+        while(true)
+        {
+            while(currentNode != null)
+            {
+                l.addLast(currentNode);
+                currentNode = currentNode.leftNode;
+            }
+
+            while(currentNode == null && l.size() != 0)
+            {
+                currentNode = l.get(l.size()-1);
+                if(currentNode.rightNode == null || currentNode.rightNode == prevNode)
+                {
+                    System.out.print(currentNode.val);
+                    l.removeLast();
+                    prevNode = currentNode;
+                    currentNode = null;
+                }
+                else
+                {
+                    currentNode = currentNode.rightNode;
+                }
+            }
+
+            if(l.size() == 0)
+            {
+                return;
+            }
+        }
+
+    }
 }
