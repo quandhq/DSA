@@ -14,11 +14,36 @@ class Tree:
         pass
 
     @staticmethod
-    def postOrderTraversalWithRecursion(root: Node) -> None:    #return list that contain results
+    def postOrderTraversalWithRecursion(root: Node) -> list:    #return list that contain results
+        res = []
         if root != None:
-            Tree.postOrderTraversalWithRecursion(root.leftNode)
-            print(root.val, end=" ")
-            Tree.postOrderTraversalWithRecursion(root.rightNode)
+            res.extend(Tree.postOrderTraversalWithRecursion(root.leftNode))
+            res.extend(Tree.postOrderTraversalWithRecursion(root.rightNode))
+            res.append(root.val)
+        return res
             
-Tree.postOrderTraversalWithRecursion(root)
+    @staticmethod
+    def postOrderTraversalWithoutRecursion(root: Node) -> list: #return list that contain results
+        stack = [root]
+        visit = [False]
+        res = []
+        while len(stack) != 0:
+            cur = stack.pop()
+            visited = visit.pop()
+            if cur != None:
+                if visited == True:
+                    res.append(cur.val)
+                else:
+                    stack.append(cur)
+                    visit.append(True)
+                    stack.append(cur.rightNode)
+                    visit.append(False)
+                    stack.append(cur.leftNode)
+                    visit.append(False)
+        return res        
             
+print("postOrderTraversalWithRecursion")            
+print(Tree.postOrderTraversalWithRecursion(root))
+print()
+print("postOrderTraversalWithoutRecursion")
+print(Tree.postOrderTraversalWithoutRecursion(root))            
