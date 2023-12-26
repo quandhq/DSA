@@ -1,13 +1,12 @@
 package node;
 
+import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
-import java.util.Vector;
 
-import javax.swing.AbstractAction;
 
 public class Node
 {
@@ -281,5 +280,33 @@ public class Node
         }
     }
 
-    // public void preOrderTraversal() <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    public static List<Integer> postOrderTraversalWithoutRecursion(Node root)
+    {
+        List<Integer> res = new ArrayList<>();
+        List<Node> stack = new ArrayList<>(Arrays.asList(root));
+        List<Boolean> visit = new ArrayList<>(Arrays.asList(false));
+        while(stack.size() != 0)
+        {
+            Node cur = stack.removeLast();
+            Boolean visited = visit.removeLast();
+            if(cur != null)
+            {
+                if(visited.booleanValue() == true)
+                {
+                    res.addLast(cur.val);
+                }
+                else
+                {
+                    stack.addLast(cur);
+                    visit.addLast(true);
+                    stack.addLast(cur.rightNode);
+                    visit.addLast(false);
+                    stack.addLast(cur.leftNode);
+                    visit.addLast(false);
+                }
+            }
+        }
+        return res;
+    }
+
 }

@@ -52,6 +52,14 @@ public class Main
 
         System.out.println("Preorder traversal");
         Node.preOrderTraversal(root);
+        System.out.println();
+
+        System.out.println("Post order traversal without recursion");       //4 5 2 6 7 3 1
+        for(Integer i : Node.postOrderTraversalWithoutRecursion(root))
+        {
+            System.out.print(i.intValue() + " ");   
+        }
+        System.out.println();
     } 
 }
 
