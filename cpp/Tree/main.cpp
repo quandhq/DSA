@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <deque>
 
 
 /*
@@ -70,6 +72,39 @@ class Tree
             }
             return result;
         }
+
+        static int heightOfBinaryTreeWithRecursion(Node* root)
+        {
+            if(root == nullptr) return 0;
+            return std::max(Tree::heightOfBinaryTreeWithRecursion((*root).left), Tree::heightOfBinaryTreeWithRecursion((*root).right)) + 1;
+        }
+
+        static int heightOfBinaryTreeWithoutRecursion(Node* root)
+        {
+            if(root == nullptr) return 0;
+            std::deque<Node*> queue;
+            queue.push_back(root);
+            queue.push_back(nullptr);
+            int level = 0;
+            while(queue.size() != 0)
+            {
+                Node* temp = queue.at(0);
+                queue.pop_front();
+                if(temp == nullptr){
+                    ++level;
+                    if(queue.size() != 0)
+                    {
+                        queue.push_back(nullptr);
+                    }
+                }
+                else
+                {
+                    if(temp->left != nullptr) queue.push_back(temp->left);
+                    if(temp->right != nullptr) queue.push_back(temp->right);
+                }
+            }
+            return level;
+        }
 };
 
 int main()
@@ -86,5 +121,15 @@ int main()
     {
         std::cout << i << " ";
     }
+
     std::cout << std::endl;
+
+    std::cout << "Height of binary tree using recursion" << std::endl;
+    std::cout << Tree::heightOfBinaryTreeWithRecursion(&root);
+    std::cout << std::endl;
+
+    std::cout << "Height of binary tree without recursion" << std::endl;
+    std::cout << Tree::heightOfBinaryTreeWithoutRecursion(&root);
+    std::cout << std::endl;
+
 }
