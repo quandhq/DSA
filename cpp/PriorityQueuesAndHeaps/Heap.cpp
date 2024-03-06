@@ -71,12 +71,12 @@ int log(int base, int value)
 
 void percolateDown(Heap* h, int i)
 {
-    //i: is the position that we want to precolate 
-    //precolateDown: reallocate from top ti bottom
+    //i: is the position that we want to percolate 
+    //precolateDown: reallocate from top to bottom
     int l; //!< left child of node i
     int r; //!< right child of node i
     int temp; //!< use for swapping two nodes
-    int max; //!< use for containing the node that that has the maximum value between the current node and it's children
+    int max; //!< use for containing the node that has the maximum value between the current node and it's children
     l = leftChild(h, i);
     r = rightChild(h, i);
     if(l != -1 && (h->arr)[i] < (h->arr)[l]) //!< get the bigger element between i and it's left child
@@ -89,7 +89,7 @@ void percolateDown(Heap* h, int i)
     }
     //now max is the biggest element between i and it's left child
 
-    if(r != -1 && (h->arr)[max] < (h->arr)[r])  //!< check if i's right child is bigger than i and it's left child
+    if(r != -1 && (h->arr)[max] < (h->arr)[r])  //!< check if i's right child is bigger than both i and it's left child
     {
         max = r;
     }
@@ -177,7 +177,7 @@ void buildHeap(Heap* h, int a[], int n)
     }
     printHeap(h);
 
-    // heapify from the child of the last leaf meaning that the first parent from the bottom
+    // heapify from the parent of the last leaf (meaning that the first parent from the bottom) up to the top
     for(int i=(h->count-2)/2; i>=0; --i)
     {
         percolateDown(h, i);
@@ -188,5 +188,6 @@ void buildHeap(Heap* h, int a[], int n)
     
     return;
 }
+
 
 
