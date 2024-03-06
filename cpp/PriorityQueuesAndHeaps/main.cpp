@@ -29,9 +29,18 @@ int main()
     //===================test build heap======================
 
     int n = 12;
-    int a[12] = {1,5,14,2,10,21,18,3,11,8,7,12};
+    int a[12] = {99, 67, 85, 56, 34, 19};
     Heap* h = createHeap(2,1);
-    buildHeap(h, a, 12);
+    buildHeap(h, a, 6);
+    printHeap(h);
+    std::cout << "======================" << '\n';
+    std::cout << "Element to be deleted: " << deleteElement(h, 1) << '\n';
+    printHeap(h);
+    std::cout << "Print all elements that less than" << '\n';
+    printAllElementsThatLessThanValue(h, 99, 0);
+    std::cout << '\n';
 
+
+    deleteHeap(h);
     return 0;
 }

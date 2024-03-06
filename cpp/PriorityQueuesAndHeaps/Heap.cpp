@@ -2,6 +2,11 @@
 #include <iostream>
 #include <cmath>
 
+/*
+All functions in this file are used for max-heap  
+ */
+
+
 class Heap
 {
 public:
@@ -9,13 +14,6 @@ public:
     int count;
     int capacity;
     int heap_type;
-
-    ~Heap()
-    {
-        delete arr;
-        std::cout << "Deallocate pointer" << '\n';
-    }
-
 };
 
 Heap* createHeap(int capacity, int heap_type)
@@ -31,25 +29,30 @@ Heap* createHeap(int capacity, int heap_type)
 
 void deleteHeap(Heap* h)
 {
+    delete h->arr;
     delete h;
 }
 
 int parent(Heap* h, int i)
 {
-    if(i<=0 || i>h->count) return -1;
+    if(i<=0 || i>=h->count) return -1;
     return (int)((i-1)/2);
 }
 
 int leftChild(Heap* h, int i)
 {
-    if(i<0 || i> parent(h, h->count)) return -1;
-    return (2*i+1);
+    if(i<0 || i> parent(h, h->count-1)) return -1;
+    int position = (2*i+1);
+    if(position >= h->count) return -1; 
+    return position;
 }
 
 int rightChild(Heap* h, int i)
 {
-    if(i<0 || i> parent(h, h->count)) return -1;
-    return (2*i+2);
+    if(i<0 || i> parent(h, h->count-1)) return -1;
+    int position = (2*i+2);
+    if(position >= h->count) return -1; 
+    return position;
 }
 
 int getMaximum(Heap* h)
@@ -71,6 +74,7 @@ int log(int base, int value)
 
 void percolateDown(Heap* h, int i)
 {
+    std::cout << "percolate: " << h->arr[i] << '\n';
     //i: is the position that we want to percolate 
     //precolateDown: reallocate from top to bottom
     int l; //!< left child of node i
@@ -79,6 +83,7 @@ void percolateDown(Heap* h, int i)
     int max; //!< use for containing the node that has the maximum value between the current node and it's children
     l = leftChild(h, i);
     r = rightChild(h, i);
+    std::cout << "left-"<< l << " right-" << r << '\n'; 
     if(l != -1 && (h->arr)[i] < (h->arr)[l]) //!< get the bigger element between i and it's left child
     {
         max = l; //!< element's value is smaller than it's left child
@@ -155,6 +160,16 @@ void insertElement(Heap* h, int element)
     if(h->count == h->capacity) resizeHeap(h);
     ++h->count;
     int pos = h->count - 1;
+    
+    /*
+    Explain the below while loop:
+        Assume that Heap h is alredy a max-heap, the last element that has just been added to the heep would be not in correct place.
+        Go from node parent of that last node, we will use 'i' for storing the correct position of the newly added node, with the first
+        iteration 'i' will be the last position of heap. Each step we will examine if that parent node is greater than the newly added node ('i'),
+        if yes, newly added node has already in right place, if no, push the parent node down to 'i' position and 'i' now will take that 
+        parent node position and maybe this will be the correct position.
+     */
+    
     while(pos > 0 && element > (h->arr)[(pos-1)/2])
     {
         (h->arr)[pos] = (h->arr)[(pos-1)/2];
@@ -181,13 +196,45 @@ void buildHeap(Heap* h, int a[], int n)
     for(int i=(h->count-2)/2; i>=0; --i)
     {
         percolateDown(h, i);
-        printHeap(h);
     }
 
     // std::cout << h->arr[0];
     
+    
     return;
 }
 
+
+int deleteElement(Heap* h, int i) //!< 'i' starts from 0
+{
+    if(i>=h->count) return -1;
+    int elementToBeDeleted = h->arr[i]; 
+    h->arr[i] = (h->arr)[(h->count)-1];
+    --(h->count);
+    std::cout << "---" << (h->arr)[i] << "----" << '\n';
+    percolateDown(h, i);
+    return elementToBeDeleted;
+}
+
+void printAllElementsThatLessThanValue(Heap* h, int value, int position)
+{
+    if(position == -1)
+    {
+        return;
+    }
+    if(h->arr[position] < value)
+    {
+        std::cout << h->arr[position] << '-';
+        printAllElementsThatLessThanValue(h, value, leftChild(h, position));
+        printAllElementsThatLessThanValue(h, value, rightChild(h, position));
+        return;
+    }
+    if(h->arr[position] >= value)
+    {
+        printAllElementsThatLessThanValue(h, value, leftChild(h, position));
+        printAllElementsThatLessThanValue(h, value, rightChild(h, position));
+        return;
+    }
+}
 
 
